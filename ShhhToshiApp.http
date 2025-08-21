@@ -1,0 +1,6 @@
+@ShhhToshiApp_HostAddress = http://localhost:5088
+
+GET {{ShhhToshiApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

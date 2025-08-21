@@ -1,0 +1,92 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+
+# Rider project files
+.idea/
+
+# VS Code settings
+.vscode/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Build results
+*.dll
+*.exe
+*.app
+*.so
+*.dylib
+*.pdb
+
+# EF Core Migrations metadata
+*.db
+
+# Visual Studio files
+*.vs/
+
+# Auto-generated files
+Generated_Code/
+
+# Publish folder
+publish/
+*.Publish.xml
+
+# Logs
+*.log
+
+# Database files (if using local SQLite for testing)
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# Environment settings
+.env
+.env.*
+
+# Secrets
+secrets.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# JetBrains Rider
+.idea/
+
+# Backup files
+*~  
+*.bak
+*.tmp
+
+# NCrunch
+*.ncrunch*
+.*crunch*.local.xml
+
+# Web config transforms
+web.*.config
+
+# Test result files
+TestResult.xml
+TestResults/
+
+# DotCover
+*.dotCover
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# Resharper
+_ReSharper*/
+*.ReSharper
+
+# Rider system
+.idea/
