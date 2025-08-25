@@ -95,22 +95,23 @@ namespace ShhhToshiApp.Controllers
             return Ok(new { user.Points });
         }
 
-        // GET: Return current points and conversion rate
-        [HttpGet("/api/points")]
-        public async Task<IActionResult> GetPoints(
+        // GET: Return completed task for the wallet
+        [HttpGet("completedTasks")]
+        public async Task<IActionResult> TaskCompleteHistory(
             [FromHeader(Name = "X-Wallet-Address")] string walletAddress)
         {
-            var user = await _dbContext.WalletUsers
-                .FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
-            if (user is null) return NotFound("Wallet not registered");
+            var history = await _dbContext.TaskCompletions
+                .Where(tc => tc.WalletAddress == walletAddress)
+                .Select(tc => new TaskCompleteHistoryDto
+                {
+                    Id = tc.Id,
+                    WalletAddress = tc.WalletAddress,
+                    TaskId = tc.TaskId,
+                    CompletedAt = tc.CompletedAt,
+                })
+                .ToListAsync();
 
-            var dto = new PointsInfoDto
-            {
-                Points = user.Points,
-                ConversionRate = ConversionRate
-            };
-
-            return Ok(dto);
+            return Ok(history);
         }
 
         // POST: Claim all points and convert to TON
@@ -140,7 +141,7 @@ namespace ShhhToshiApp.Controllers
 
             // Add converted balance to user wallets ton balance
             user.TONBalance += converted;
-            
+
             // Reset user points after claim
             user.Points = 0;
             await _dbContext.SaveChangesAsync();
@@ -153,8 +154,26 @@ namespace ShhhToshiApp.Controllers
             return Ok(dto);
         }
 
+        // GET: Return current points and conversion rate
+        [HttpGet("/api/points")]
+        public async Task<IActionResult> GetPoints(
+            [FromHeader(Name = "X-Wallet-Address")] string walletAddress)
+        {
+            var user = await _dbContext.WalletUsers
+                .FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            if (user is null) return NotFound("Wallet not registered");
+
+            var dto = new PointsInfoDto
+            {
+                Points = user.Points,
+                ConversionRate = ConversionRate
+            };
+
+            return Ok(dto);
+        }
+
         // GET: Return claim history for the wallet
-        [HttpGet("/api/points/history")]
+        [HttpGet("/api/points/claimHistory")]
         public async Task<IActionResult> ClaimHistory(
             [FromHeader(Name = "X-Wallet-Address")] string walletAddress)
         {

@@ -14,25 +14,12 @@ namespace ShhhToshiApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             // Add DB Context
 
-            //builder.Services.AddDbContext<AppDbContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
-            //});
-
-            // Use environment variable for connection string
-            var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
             });
-
-            // Configure the application to listen on a specific port
-            // Use the PORT environment variable or default to 5000
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-            builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
             // Adding CORS policy
 

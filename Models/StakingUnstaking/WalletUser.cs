@@ -9,6 +9,7 @@ namespace ShhhToshiApp.Models.StakingUnstaking
         public decimal StakedAmount { get; set; }
         public decimal TONBalance { get; set; }
         public DateTime LastStakedAt { get; set; }
+        public DateTime LastUnstakedAt { get; set; }
         public DateTime JoinedAt { get; set; }
 
         // New field for points
