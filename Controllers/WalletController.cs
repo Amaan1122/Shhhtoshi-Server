@@ -53,11 +53,12 @@ namespace ShhhToshiApp.Controllers
 
             var response = new WalletInfoDto
             {
-                Address = user.WalletAddress,
+                WalletAddress = user.WalletAddress,
                 TONBalance = user.TONBalance,
                 StakedAmount = user.StakedAmount,
                 LastStakedAt = user.LastStakedAt,
-                LastUnstakedAt = user.LastUnstakedAt
+                LastUnstakedAt = user.LastUnstakedAt,
+                Points = user.Points
             };
 
             return Ok(response);
