@@ -13,7 +13,7 @@ namespace ShhhToshiApp.Models.StakingUnstaking
         public DateTime JoinedAt { get; set; }
 
         // New field for points
-        public int Points { get; set; }
+        public decimal Points { get; set; }
 
         public ICollection<TaskCompletion> TaskCompletions { get; set; }
         public ICollection<PointClaim> PointClaims { get; set; }

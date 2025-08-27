@@ -6,7 +6,7 @@ namespace ShhhToshiApp.Models.TaskSystem
     {
         public Guid Id { get; set; }
         public string WalletAddress { get; set; }
-        public int PointsClaimed { get; set; }
+        public decimal PointsClaimed { get; set; }
         public decimal ConvertedAmount { get; set; }
         public DateTime ClaimedAt { get; set; }
 

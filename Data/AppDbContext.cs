@@ -9,10 +9,11 @@ namespace Shhhtoshi.Api.DB
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<WalletUser> WalletUsers { get; set; }
-        public DbSet<TaskItem> TaskItems { get; set; }
-        public DbSet<TaskCompletion> TaskCompletions { get; set; }
-        public DbSet<PointClaim> PointClaims { get; set; }
+    public DbSet<WalletUser> WalletUsers { get; set; }
+    public DbSet<TaskItem> TaskItems { get; set; }
+    public DbSet<TaskCompletion> TaskCompletions { get; set; }
+    public DbSet<PointClaim> PointClaims { get; set; }
+    public DbSet<StakeUnstakeEvent> StakeUnstakeEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,12 @@ namespace Shhhtoshi.Api.DB
                 .HasOne(tc => tc.TaskItem)
                 .WithMany()
                 .HasForeignKey(tc => tc.TaskId);
+
+            modelBuilder.Entity<StakeUnstakeEvent>()
+                .HasOne<WalletUser>()
+                .WithMany()
+                .HasForeignKey(e => e.WalletAddress)
+                .HasPrincipalKey(u => u.WalletAddress);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class PointsInfoDto
     {
-        public int Points { get; set; }
-        public int ConversionRate { get; set; }
+        public decimal Points { get; set; }
+        public decimal ConversionRate { get; set; }
     }
 }

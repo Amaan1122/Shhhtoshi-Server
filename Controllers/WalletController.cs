@@ -58,6 +58,7 @@ namespace ShhhToshiApp.Controllers
                 StakedAmount = user.StakedAmount,
                 LastStakedAt = user.LastStakedAt,
                 LastUnstakedAt = user.LastUnstakedAt,
+                JoinedAt = user.JoinedAt,
                 Points = user.Points
             };
 

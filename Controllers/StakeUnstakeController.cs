@@ -29,6 +29,16 @@ namespace ShhhToshiApp.Controllers
             user.TONBalance -= stakeAmount;
             user.LastStakedAt = DateTime.UtcNow;
 
+            // Record event
+            _dbContext.StakeUnstakeEvents.Add(new Models.StakingUnstaking.StakeUnstakeEvent {
+                Id = Guid.NewGuid(),
+                WalletAddress = walletAddress,
+                Type = "Stake",
+                Amount = stakeAmount,
+                EventDate = DateTime.UtcNow,
+                Status = "completed"
+            });
+
             // check if this is first stake for the user
             await _taskCompletionService.CompleteTaskIfNotAlready(walletAddress, "First Stake");
 
@@ -53,9 +63,41 @@ namespace ShhhToshiApp.Controllers
             user.TONBalance += unStakeAmount;
             user.LastUnstakedAt = DateTime.UtcNow;
 
+            // Record event
+            _dbContext.StakeUnstakeEvents.Add(new Models.StakingUnstaking.StakeUnstakeEvent {
+                Id = Guid.NewGuid(),
+                WalletAddress = walletAddress,
+                Type = "Unstake",
+                Amount = unStakeAmount,
+                EventDate = DateTime.UtcNow,
+                Status = "completed"
+            });
+
             await _dbContext.SaveChangesAsync();
             return Ok(new { user.StakedAmount });
         }
+        // GET: Return stake/unstake history for the wallet
+        [HttpGet("stakeUnstake/history")]
+        public async Task<IActionResult> GetStakeUnstakeHistory([
+            FromHeader(Name = "X-Wallet-Address")] string walletAddress)
+        {
+            var user = await _dbContext.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            if (user == null) return NotFound("Wallet not registered");
 
+            var stakeEvents = await _dbContext.StakeUnstakeEvents
+                .Where(e => e.WalletAddress == walletAddress)
+                .OrderByDescending(e => e.EventDate)
+                .Select(e => new
+                {
+                    e.Id,
+                    e.Type, // "Stake" or "Unstake"
+                    e.Amount,
+                    e.EventDate,
+                    e.Status // "completed" or "pending"
+                })
+                .ToListAsync();
+
+            return Ok(stakeEvents);
+        }
     }
 }

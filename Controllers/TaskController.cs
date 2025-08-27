@@ -11,7 +11,7 @@ namespace ShhhToshiApp.Controllers
     public class TaskController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private const int ConversionRate = 100; // 100 points = 1 TON
+        private const decimal ConversionRate = 100; // 100 points = 1 TON
 
         public TaskController(AppDbContext dbContext)
         {
@@ -190,6 +190,25 @@ namespace ShhhToshiApp.Controllers
                 .ToListAsync();
 
             return Ok(history);
+        }
+
+        // GET: Return total points ever earned by the user
+        [HttpGet("/api/points/total-earned")]
+        public async Task<IActionResult> GetTotalPointsEarned(
+            [FromHeader(Name = "X-Wallet-Address")] string walletAddress)
+        {
+            var user = await _dbContext.WalletUsers
+                .FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            if (user is null) return NotFound("Wallet not registered");
+
+            // Sum all claimed points
+            var totalClaimed = await _dbContext.PointClaims
+                .Where(pc => pc.WalletAddress == walletAddress)
+                .SumAsync(pc => (decimal?)pc.PointsClaimed) ?? 0;
+
+            // Add current unclaimed points
+            var totalEarned = totalClaimed + user.Points;
+            return Ok(totalEarned);
         }
     }
 }

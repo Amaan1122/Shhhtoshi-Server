@@ -8,7 +8,7 @@
         public DateTime LastStakedAt { get; set; }
         public DateTime LastUnstakedAt { get; set; }
         public DateTime JoinedAt { get; set; }
-        public int Points { get; set; }
+        public decimal Points { get; set; }
     }
 
 }

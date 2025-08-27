@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shhhtoshi.Api.DB;
 
@@ -11,9 +12,11 @@ using Shhhtoshi.Api.DB;
 namespace ShhhToshiApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250827145852_intToDecimalMigration")]
+    partial class intToDecimalMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,37 +24,6 @@ namespace ShhhToshiApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ShhhToshiApp.Models.StakingUnstaking.StakeUnstakeEvent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("EventDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WalletAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WalletAddress");
-
-                    b.ToTable("StakeUnstakeEvents");
-                });
 
             modelBuilder.Entity("ShhhToshiApp.Models.StakingUnstaking.WalletUser", b =>
                 {
@@ -163,16 +135,6 @@ namespace ShhhToshiApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TaskItems");
-                });
-
-            modelBuilder.Entity("ShhhToshiApp.Models.StakingUnstaking.StakeUnstakeEvent", b =>
-                {
-                    b.HasOne("ShhhToshiApp.Models.StakingUnstaking.WalletUser", null)
-                        .WithMany()
-                        .HasForeignKey("WalletAddress")
-                        .HasPrincipalKey("WalletAddress")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ShhhToshiApp.Models.TaskSystem.PointClaim", b =>
